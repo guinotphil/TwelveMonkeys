@@ -44,7 +44,7 @@ public class TargaImageReaderSpi extends JMagickImageReaderSpiSupport {
                 new String[]{"tga"},
                 new String[]{"image/x-tga", "image/targa"},
                 TargaImageReader.class.getName(),
-                new String[]{"com.twelvemonkeys.imageio.plugins.jmagick.TargaImageWriterSpi"}
+                new String[] {TargaImageWriterSpi.class.getName()}
         );
     }
 
@@ -63,11 +63,10 @@ public class TargaImageReaderSpi extends JMagickImageReaderSpiSupport {
         //                  new byte[] {-1, 0x01, 0x20},                      // Type 31: Compressed CM
         //                  new byte[] {-1, 0x01, 0x21},                      // Type 32: Compressed CM, 4 pass
         //                  },
-        try {
-            pSource.seek(pSource.length() - 18);
-        } catch (IndexOutOfBoundsException e) {
+        if (-1 == pSource.length()) {
             return false;
         }
+        pSource.seek(pSource.length() - 18);
         byte[] magic = new byte[18];
         pSource.readFully(magic);
 
